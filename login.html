@@ -5,20 +5,26 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KIRITO PLAYER</title>
+
 <style>
-* { box-sizing: border-box; }
+* {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
   min-height: 100vh;
-  background: #050914;
+  background: #030712;
   color: white;
   font-family: Arial, sans-serif;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
 }
+
 .login {
-  width: 90%;
+  width: 100%;
   max-width: 380px;
   padding: 28px;
   background: #0b1425;
@@ -26,15 +32,18 @@ body {
   border-radius: 16px;
   box-shadow: 0 0 25px #0066ff55;
 }
+
 h1 {
   text-align: center;
   color: #16aaff;
   letter-spacing: 2px;
 }
+
 p {
   text-align: center;
   color: #9bbbd8;
 }
+
 input {
   width: 100%;
   padding: 14px;
@@ -45,48 +54,126 @@ input {
   color: white;
   font-size: 15px;
 }
+
 button {
   width: 100%;
   padding: 14px;
-  margin-top: 14px;
+  margin-top: 12px;
   border: 0;
   border-radius: 8px;
   background: #087dff;
   color: white;
   font-weight: bold;
   font-size: 16px;
+  cursor: pointer;
+}
+
+.settings {
+  background: #172b45;
+}
+
+#mensagem {
+  min-height: 20px;
+  font-size: 13px;
 }
 </style>
 </head>
+
 <body>
+
 <div class="login">
   <h1>KIRITO PLAYER</h1>
   <p>XTREAM CODES COMPATIBLE API</p>
 
-  <input id="dns" placeholder="Servidor DNS (http://...)" />
-  <input id="usuario" placeholder="Nome de usuário" />
-  <input id="senha" type="password" placeholder="Senha" />
+  <input
+    id="dns"
+    type="text"
+    placeholder="Servidor DNS (http://...)"
+  >
+
+  <input
+    id="usuario"
+    type="text"
+    placeholder="Nome de usuário"
+  >
+
+  <input
+    id="senha"
+    type="password"
+    placeholder="Senha"
+  >
 
   <button onclick="entrar()">ENTRAR</button>
-  <button onclick="alert('Configurações em breve')">SETTINGS</button>
+
+  <button class="settings" onclick="limparDados()">
+    SETTINGS / TROCAR SERVIDOR
+  </button>
+
   <p id="mensagem"></p>
 </div>
 
 <script>
+window.onload = function() {
+  document.getElementById("dns").value =
+    localStorage.getItem("kirito_dns") || "";
+
+  document.getElementById("usuario").value =
+    localStorage.getItem("kirito_usuario") || "";
+
+  document.getElementById("senha").value =
+    localStorage.getItem("kirito_senha") || "";
+};
+
 function entrar() {
   const dns = document.getElementById("dns").value.trim();
   const usuario = document.getElementById("usuario").value.trim();
   const senha = document.getElementById("senha").value;
+  const mensagem = document.getElementById("mensagem");
 
   if (!dns || !usuario || !senha) {
-    document.getElementById("mensagem").textContent =
-      "Preencha todos os campos.";
+    mensagem.textContent = "Preencha todos os campos.";
     return;
   }
 
-  document.getElementById("mensagem").textContent =
-    "Tela pronta. A autenticação será configurada na próxima etapa.";
+  try {
+    const servidor = new URL(dns);
+
+    if (
+      !["http:", "https:"].includes(servidor.protocol) ||
+      servidor.port
+    ) {
+      mensagem.textContent =
+        "Informe um DNS válido, sem porta.";
+      return;
+    }
+
+    localStorage.setItem("kirito_dns", dns);
+    localStorage.setItem("kirito_usuario", usuario);
+    localStorage.setItem("kirito_senha", senha);
+
+    mensagem.textContent =
+      "Login salvo! Conexão será ativada na próxima etapa.";
+
+  } catch (erro) {
+    mensagem.textContent = "Confira o endereço DNS.";
+  }
+}
+
+function limparDados() {
+  if (confirm("Deseja apagar os dados salvos e trocar de servidor?")) {
+    localStorage.removeItem("kirito_dns");
+    localStorage.removeItem("kirito_usuario");
+    localStorage.removeItem("kirito_senha");
+
+    document.getElementById("dns").value = "";
+    document.getElementById("usuario").value = "";
+    document.getElementById("senha").value = "";
+
+    document.getElementById("mensagem").textContent =
+      "Dados apagados. Informe um novo servidor.";
+  }
 }
 </script>
+
 </body>
 </html>
