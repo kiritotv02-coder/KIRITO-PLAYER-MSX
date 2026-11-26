@@ -1,0 +1,22 @@
+{
+  "type": "pages",
+  "headline": "KIRITO PLAYER",
+  "background": "linear-gradient(135deg,#050914,#10264a)",
+  "items": [
+    {
+      "title": "📺 TV AO VIVO",
+      "action": "link",
+      "data": "https://example.com/tv.json"
+    },
+    {
+      "title": "🎬 FILMES",
+      "action": "link",
+      "data": "https://example.com/filmes.json"
+    },
+    {
+      "title": "🍿 SÉRIES",
+      "action": "link",
+      "data": "https://example.com/series.json"
+    }
+  ]
+}
