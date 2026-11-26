@@ -3,177 +3,134 @@
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>KIRITO PLAYER</title>
-
 <style>
-* {
-  box-sizing: border-box;
+*{box-sizing:border-box}
+body{
+  margin:0;min-height:100vh;padding:20px;
+  background:#030712;color:white;font-family:Arial;
+  display:flex;align-items:center;justify-content:center
 }
-
-body {
-  margin: 0;
-  min-height: 100vh;
-  background: #030712;
-  color: white;
-  font-family: Arial, sans-serif;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
+.login{
+  width:100%;max-width:380px;padding:28px;
+  background:#0b1425;border:1px solid #087dff;
+  border-radius:16px;box-shadow:0 0 25px #0066ff55
 }
-
-.login {
-  width: 100%;
-  max-width: 380px;
-  padding: 28px;
-  background: #0b1425;
-  border: 1px solid #087dff;
-  border-radius: 16px;
-  box-shadow: 0 0 25px #0066ff55;
+h1{text-align:center;color:#16aaff;letter-spacing:2px}
+p{text-align:center;color:#9bbbd8}
+input,button{
+  width:100%;padding:14px;margin:9px 0;
+  border-radius:8px;font-size:15px
 }
-
-h1 {
-  text-align: center;
-  color: #16aaff;
-  letter-spacing: 2px;
+input{
+  border:1px solid #1768a8;background:#050b16;color:white
 }
-
-p {
-  text-align: center;
-  color: #9bbbd8;
+button{
+  border:0;background:#087dff;color:white;
+  font-weight:bold;cursor:pointer
 }
-
-input {
-  width: 100%;
-  padding: 14px;
-  margin: 9px 0;
-  border: 1px solid #1768a8;
-  border-radius: 8px;
-  background: #050b16;
-  color: white;
-  font-size: 15px;
-}
-
-button {
-  width: 100%;
-  padding: 14px;
-  margin-top: 12px;
-  border: 0;
-  border-radius: 8px;
-  background: #087dff;
-  color: white;
-  font-weight: bold;
-  font-size: 16px;
-  cursor: pointer;
-}
-
-.settings {
-  background: #172b45;
-}
-
-#mensagem {
-  min-height: 20px;
-  font-size: 13px;
-}
+.settings{background:#172b45}
+#mensagem{font-size:13px;min-height:35px}
 </style>
 </head>
-
 <body>
-
 <div class="login">
   <h1>KIRITO PLAYER</h1>
   <p>XTREAM CODES COMPATIBLE API</p>
 
-  <input
-    id="dns"
-    type="text"
-    placeholder="Servidor DNS (http://...)"
-  >
-
-  <input
-    id="usuario"
-    type="text"
-    placeholder="Nome de usuário"
-  >
-
-  <input
-    id="senha"
-    type="password"
-    placeholder="Senha"
-  >
+  <input id="dns" placeholder="Servidor DNS (http://...)">
+  <input id="usuario" placeholder="Nome de usuário">
+  <input id="senha" type="password" placeholder="Senha">
 
   <button onclick="entrar()">ENTRAR</button>
-
   <button class="settings" onclick="limparDados()">
     SETTINGS / TROCAR SERVIDOR
   </button>
-
   <p id="mensagem"></p>
 </div>
 
 <script>
-window.onload = function() {
-  document.getElementById("dns").value =
-    localStorage.getItem("kirito_dns") || "";
+const WORKER =
+"https://kirito-player-proxy.leomaxbolado.workers.dev";
 
-  document.getElementById("usuario").value =
-    localStorage.getItem("kirito_usuario") || "";
-
-  document.getElementById("senha").value =
-    localStorage.getItem("kirito_senha") || "";
+window.onload = function(){
+  dns.value = localStorage.getItem("kirito_dns") || "";
+  usuario.value = localStorage.getItem("kirito_usuario") || "";
+  senha.value = localStorage.getItem("kirito_senha") || "";
 };
 
-function entrar() {
-  const dns = document.getElementById("dns").value.trim();
-  const usuario = document.getElementById("usuario").value.trim();
-  const senha = document.getElementById("senha").value;
-  const mensagem = document.getElementById("mensagem");
+async function entrar(){
+  const servidor = dns.value.trim().replace(/\/+$/, "");
+  const user = usuario.value.trim();
+  const pass = senha.value;
+  const msg = document.getElementById("mensagem");
 
-  if (!dns || !usuario || !senha) {
-    mensagem.textContent = "Preencha todos os campos.";
+  if(!servidor || !user || !pass){
+    msg.textContent = "Preencha todos os campos.";
     return;
   }
 
-  try {
-    const servidor = new URL(dns);
+  let endereco;
+  try{
+    endereco = new URL(servidor);
+    if(!["http:","https:"].includes(endereco.protocol) ||
+       endereco.port || endereco.pathname !== "/" ||
+       endereco.search || endereco.hash){
+      throw new Error();
+    }
+  }catch(e){
+    msg.textContent = "Confira o DNS. Use o endereço sem porta.";
+    return;
+  }
 
-    if (
-      !["http:", "https:"].includes(servidor.protocol) ||
-      servidor.port
-    ) {
-      mensagem.textContent =
-        "Informe um DNS válido, sem porta.";
+  msg.textContent = "Conectando ao servidor...";
+
+  try{
+    const resposta = await fetch(WORKER,{
+      method:"POST",
+      headers:{"Content-Type":"application/json"},
+      body:JSON.stringify({
+        dns:servidor,
+        username:user,
+        password:pass,
+        action:"login"
+      })
+    });
+
+    const dados = await resposta.json();
+
+    if(!resposta.ok){
+      msg.textContent = dados.error || "Erro na conexão.";
       return;
     }
 
-    localStorage.setItem("kirito_dns", dns);
-    localStorage.setItem("kirito_usuario", usuario);
-    localStorage.setItem("kirito_senha", senha);
+    if(dados.user_info && Number(dados.user_info.auth) === 1){
+      localStorage.setItem("kirito_dns",servidor);
+      localStorage.setItem("kirito_usuario",user);
+      localStorage.setItem("kirito_senha",pass);
+      msg.textContent = "LOGIN VALIDADO! Conexão funcionando.";
+    }else if(dados.user_info){
+      msg.textContent = "Usuário ou senha não autorizados.";
+    }else{
+      msg.textContent = "Servidor respondeu, mas o login não foi confirmado.";
+    }
 
-    mensagem.textContent =
-      "Login salvo! Conexão será ativada na próxima etapa.";
-
-  } catch (erro) {
-    mensagem.textContent = "Confira o endereço DNS.";
+  }catch(e){
+    msg.textContent = "Falha ao conectar. Verifique a internet e o Worker.";
   }
 }
 
-function limparDados() {
-  if (confirm("Deseja apagar os dados salvos e trocar de servidor?")) {
-    localStorage.removeItem("kirito_dns");
-    localStorage.removeItem("kirito_usuario");
-    localStorage.removeItem("kirito_senha");
-
-    document.getElementById("dns").value = "";
-    document.getElementById("usuario").value = "";
-    document.getElementById("senha").value = "";
-
-    document.getElementById("mensagem").textContent =
-      "Dados apagados. Informe um novo servidor.";
-  }
+function limparDados(){
+  localStorage.removeItem("kirito_dns");
+  localStorage.removeItem("kirito_usuario");
+  localStorage.removeItem("kirito_senha");
+  dns.value="";
+  usuario.value="";
+  senha.value="";
+  document.getElementById("mensagem").textContent =
+    "Dados apagados. Informe outro servidor.";
 }
 </script>
-
 </body>
 </html>
