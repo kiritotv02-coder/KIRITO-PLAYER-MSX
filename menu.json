@@ -6,11 +6,17 @@
       "label": "ENTRAR NO PLAYER",
       "icon": "play",
       "data": {
-        "type": "pages",
-        "items": [
+        "pages": [
           {
-            "title": "ABRIR KIRITO PLAYER",
-            "action": "link:window:https://kiritotv02-coder.github.io/KIRITO-PLAYER-MSX/login.html"
+            "items": [
+              {
+                "type": "button",
+                "layout": "0,0,12,4",
+                "icon": "play",
+                "label": "ABRIR KIRITO PLAYER",
+                "action": "link:https://kiritotv02-coder.github.io/KIRITO-PLAYER-MSX/login.html"
+              }
+            ]
           }
         ]
       }
