@@ -1,3 +1,4 @@
+
 {
   "type": "pages",
   "headline": "KIRITO PLAYER",
@@ -5,7 +6,7 @@
     {
       "title": "ENTRAR NO PLAYER",
       "action": "link",
-      "data": "https://msx.benzac.de/info/"
+      "data": "https://kiritotv02-coder.github.io/KIRITO-PLAYER-MSX/login.html"
     }
   ]
 }
