@@ -1,22 +1,24 @@
 {
-  "type": "pages",
+  "name": "KIRITO PLAYER",
+  "version": "1.0.0",
   "headline": "KIRITO PLAYER",
-  "background": "linear-gradient(135deg,#050914,#10264a)",
-  "items": [
+  "style": "flat",
+  "menu": [
     {
-      "title": "📺 TV AO VIVO",
-      "action": "link",
-      "data": "https://example.com/tv.json"
+      "icon": "home",
+      "label": "INÍCIO"
     },
     {
-      "title": "🎬 FILMES",
-      "action": "link",
-      "data": "https://example.com/filmes.json"
+      "icon": "tv",
+      "label": "TV AO VIVO"
     },
     {
-      "title": "🍿 SÉRIES",
-      "action": "link",
-      "data": "https://example.com/series.json"
+      "icon": "movie",
+      "label": "FILMES"
+    },
+    {
+      "icon": "video-library",
+      "label": "SÉRIES"
     }
   ]
 }
