@@ -1,21 +1,23 @@
 {
-  "type": "pages",
+  "name": "KIRITO PLAYER",
+  "version": "1.0.0",
+  "style": "flat",
   "headline": "KIRITO PLAYER",
-  "items": [
+  "menu": [
     {
-      "title": "TV AO VIVO",
-      "action": "link",
-      "data": "https://msx.benzac.de/info/"
+      "id": "tv",
+      "icon": "live-tv",
+      "label": "TV AO VIVO"
     },
     {
-      "title": "FILMES",
-      "action": "link",
-      "data": "https://msx.benzac.de/info/"
+      "id": "filmes",
+      "icon": "movie",
+      "label": "FILMES"
     },
     {
-      "title": "SÉRIES",
-      "action": "link",
-      "data": "https://msx.benzac.de/info/"
+      "id": "series",
+      "icon": "video-library",
+      "label": "SÉRIES"
     }
   ]
 }
