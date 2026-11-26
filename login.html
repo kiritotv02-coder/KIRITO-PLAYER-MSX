@@ -1,0 +1,92 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KIRITO PLAYER</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #050914;
+  color: white;
+  font-family: Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.login {
+  width: 90%;
+  max-width: 380px;
+  padding: 28px;
+  background: #0b1425;
+  border: 1px solid #087dff;
+  border-radius: 16px;
+  box-shadow: 0 0 25px #0066ff55;
+}
+h1 {
+  text-align: center;
+  color: #16aaff;
+  letter-spacing: 2px;
+}
+p {
+  text-align: center;
+  color: #9bbbd8;
+}
+input {
+  width: 100%;
+  padding: 14px;
+  margin: 9px 0;
+  border: 1px solid #1768a8;
+  border-radius: 8px;
+  background: #050b16;
+  color: white;
+  font-size: 15px;
+}
+button {
+  width: 100%;
+  padding: 14px;
+  margin-top: 14px;
+  border: 0;
+  border-radius: 8px;
+  background: #087dff;
+  color: white;
+  font-weight: bold;
+  font-size: 16px;
+}
+</style>
+</head>
+<body>
+<div class="login">
+  <h1>KIRITO PLAYER</h1>
+  <p>XTREAM CODES COMPATIBLE API</p>
+
+  <input id="dns" placeholder="Servidor DNS (http://...)" />
+  <input id="usuario" placeholder="Nome de usuário" />
+  <input id="senha" type="password" placeholder="Senha" />
+
+  <button onclick="entrar()">ENTRAR</button>
+  <button onclick="alert('Configurações em breve')">SETTINGS</button>
+  <p id="mensagem"></p>
+</div>
+
+<script>
+function entrar() {
+  const dns = document.getElementById("dns").value.trim();
+  const usuario = document.getElementById("usuario").value.trim();
+  const senha = document.getElementById("senha").value;
+
+  if (!dns || !usuario || !senha) {
+    document.getElementById("mensagem").textContent =
+      "Preencha todos os campos.";
+    return;
+  }
+
+  document.getElementById("mensagem").textContent =
+    "Tela pronta. A autenticação será configurada na próxima etapa.";
+}
+</script>
+</body>
+</html>
