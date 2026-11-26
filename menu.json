@@ -1,23 +1,11 @@
 {
-  "name": "KIRITO PLAYER",
-  "version": "1.0.0",
-  "style": "flat",
+  "type": "pages",
   "headline": "KIRITO PLAYER",
-  "menu": [
+  "items": [
     {
-      "id": "tv",
-      "icon": "live-tv",
-      "label": "TV AO VIVO"
-    },
-    {
-      "id": "filmes",
-      "icon": "movie",
-      "label": "FILMES"
-    },
-    {
-      "id": "series",
-      "icon": "video-library",
-      "label": "SÉRIES"
+      "title": "ENTRAR NO PLAYER",
+      "action": "link",
+      "data": "https://msx.benzac.de/info/"
     }
   ]
 }
